@@ -1,0 +1,11 @@
+---
+- name: Set environment variables on hosts
+  hosts: all
+  become: true
+  become_user: ubuntu
+  tasks:
+    - name: Copy env file to hosts
+      copy:
+        src: ~/project-two/env
+        dest: /home/ubuntu/todo-list/.env
+        mode: 0644

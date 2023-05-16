@@ -1,0 +1,7 @@
+
+DB_NAME=todolist
+DB_USER=postgres
+DB_PASSWORD=<password>
+DB_HOST=<database>
+DB_PORT=5432
+SECRET_KEY=<secretkey>

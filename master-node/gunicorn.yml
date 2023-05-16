@@ -1,0 +1,32 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+    - name: Copy Gunicorn systemd service file
+      template:
+        src: ~/project-two/todolist.service
+        dest: /etc/systemd/system/todolist.service
+      register: gunicorn_service
+
+    - name: Enable and start Gunicorn service
+      systemd:
+        name: todolist
+        state: started
+        enabled: yes
+      when: gunicorn_service.changed
+      notify:
+        - Restart Gunicorn
+
+    - name: Restart Gunicorn
+      systemd:
+        name: todolist
+        state: restarted
+      when: gunicorn_service.changed
+
+  handlers:
+    - name: Restart Gunicorn
+      systemd:
+        name: todolist
+        state: restarted

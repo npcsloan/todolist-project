@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  gather_facts: no
+  tasks:
+    - name: Running system update
+      apt: update_cache=yes
+        upgrade=safe
+      register: result
+    - debug: var=result.stdout_lines
