@@ -117,8 +117,4 @@ ansible-playbook nginx.yml -i inventory.ini
 ```
 
 ## Architecture Diagram
-![project-two-diagram](https://github.com/npcsloan/project-two/assets/123162008/d55090e3-1751-46c6-be1a-0e5aa4c59002)
-
-
-
-
+![project-two-diagram](https://github.com/npcsloan/todolist-project/assets/123162008/4fcc4831-8d91-40a6-82f1-972df3b56886)
