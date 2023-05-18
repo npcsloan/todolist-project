@@ -40,8 +40,12 @@ terraform apply
 
 #### 1. Input database information into env file
 ```
-code env
-#configure
+echo 'DB_NAME=todolist
+DB_USER=postgres
+DB_PASSWORD=<password>
+DB_HOST=<database>
+DB_PORT=5432
+SECRET_KEY=<secretkey>' > env
 ```
 https://github.com/npcsloan/todolist-project/blob/main/master-node/env
 #### 2. Input pem key and set permissions
