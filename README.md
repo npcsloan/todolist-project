@@ -42,7 +42,6 @@ terraform apply
 ```
 code env
 #configure
-#
 ```
 https://github.com/npcsloan/todolist-project/blob/main/master-node/env
 #### 2. Input pem key and set permissions
