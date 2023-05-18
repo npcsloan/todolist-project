@@ -3,7 +3,7 @@
 ## About
 The following explains the steps taken to deploy a Django application titled 'Todo-list' on two nodes (servers); for setting up the configuration of each file (Terraform configs, Ansible playbooks, etc.) please see https://github.com/npcsloan/project-two/tree/main. The tools used are as follows: Terraform for deploying required AWS resources, Ansible for updating and configuring target nodes from master node, Nginx for port forwarding and load balancing, Gunicorn for processing the requests from Nginx and sending them to the app servers and vice versa, Postgresql database for application data storage.
 
-## Initialize servers via Terraform
+## Steps to initialize servers via Terraform
 #### 1. Create terraform directory and initialize terraform
 ```
 mkdir project-two
@@ -16,27 +16,27 @@ code main.tf
 ```
 https://github.com/npcsloan/todolist-project/blob/main/aws-tf/main.tf
 
-#### 3. Create and configure file to specify what provider you will be using
+#### 3. Create and configure file to specify provider
 ```
 code providers.tf
 #configure
 ```
 https://github.com/npcsloan/todolist-project/blob/main/aws-tf/providers.tf
 
-#### 4. Create and configure file containing any variables you plan to use
+#### 4. Create and configure file containing variables
 ```
 code variables.tf
 #configure
 ```
 https://github.com/npcsloan/todolist-project/blob/main/aws-tf/variables.tf
 
-#### 5. Confirm that configuration is as intended and then apply
+#### 5. Confirm that aws resources are configured as intended and then apply
 ```
 terraform plan
 terraform apply
 ```
 
-## Commands in master node
+## Steps taken in master node
 
 #### 1. Input database information into env file
 ```
