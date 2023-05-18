@@ -86,7 +86,7 @@ resource "aws_security_group" "mysg" {
   }
 }
 
-# Create webserver EC2 instance
+# Create master node
 resource "aws_instance" "master" {
   key_name                    = "study-key"
   ami                         = "ami-0583a1f1cd3c11ebc"
@@ -99,6 +99,7 @@ resource "aws_instance" "master" {
   }
 }
 # Need to go back and put one target node on pub_sub1
+# Create target nodes
 resource "aws_instance" "nodes" {
   count                       = var.num_of_nodes
   key_name                    = "study-key"
