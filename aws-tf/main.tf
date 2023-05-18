@@ -98,7 +98,7 @@ resource "aws_instance" "master" {
     Name = "master"
   }
 }
-
+# Need to go back and put one target node on pub_sub1
 resource "aws_instance" "nodes" {
   count                       = var.num_of_nodes
   key_name                    = "study-key"
