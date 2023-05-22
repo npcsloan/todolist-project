@@ -1,3 +1,4 @@
+echo '
 # set region
 provider "aws" {
   region = "us-west-1"
@@ -15,16 +16,6 @@ resource "aws_vpc" "myvpc" {
 # create internet gateway
 resource "aws_internet_gateway" "myigw" {
   vpc_id = aws_vpc.myvpc.id
-}
-
-# Define EIP for Nat
-resource "aws_eip" "nat" {
-}
-
-# Define NAT Gateway
-resource "aws_nat_gateway" "assessment2_nat_gateway" {
-  allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.pub_sub1.id
 }
 
 # create route table
@@ -48,7 +39,7 @@ resource "aws_subnet" "pub_sub1" {
 }
 
 # create public subnet2
-resource "aws_subnet" "priv_sub" {
+resource "aws_subnet" "pub_sub2" {
   vpc_id            = aws_vpc.myvpc.id
   cidr_block        = "10.0.0.16/28"
   availability_zone = "us-west-1c"
@@ -64,13 +55,13 @@ resource "aws_route_table_association" "igw_rta1" {
 }
 
 # associate subnet2 with route table
-resource "aws_route_table_association" "assessment2_pvt_rt_assoc" {
-  subnet_id      = aws_subnet.assessment2_pvt_subnet.id
-  route_table_id = aws_route_table.assessment2_pvt_rt.id
+resource "aws_route_table_association" "igw_rta2" {
+  subnet_id      = aws_subnet.pub_sub2.id
+  route_table_id = aws_route_table.pub_rt.id
 }
 
-# create security group1
-resource "aws_security_group" "mysg1" {
+# create security group
+resource "aws_security_group" "mysg" {
   name   = "http-ssh"
   vpc_id = aws_vpc.myvpc.id
 
@@ -96,32 +87,12 @@ resource "aws_security_group" "mysg1" {
   }
 }
 
-# create security group
-resource "aws_security_group" "mysg2" {
-  name   = "ssh"
-  vpc_id = aws_vpc.myvpc.id
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 # Create master node
 resource "aws_instance" "master" {
   key_name                    = "study-key"
   ami                         = "ami-0583a1f1cd3c11ebc"
   instance_type               = "t2.micro"
-  vpc_security_group_ids      = [aws_security_group.mysg1.id]
+  vpc_security_group_ids      = [aws_security_group.mysg.id]
   subnet_id                   = aws_subnet.pub_sub1.id
   associate_public_ip_address = true
   tags = {
@@ -134,7 +105,7 @@ resource "aws_instance" "node1" {
   key_name                    = "study-key"
   ami                         = "ami-014d05e6b24240371"
   instance_type               = "t2.micro"
-  vpc_security_group_ids      = [aws_security_group.mysg2.id]
+  vpc_security_group_ids      = [aws_security_group.mysg.id]
   subnet_id                   = aws_subnet.pub_sub1.id
   associate_public_ip_address = true
   tags = {
@@ -147,9 +118,9 @@ resource "aws_instance" "node2" {
   ami                         = "ami-014d05e6b24240371"
   instance_type               = "t2.micro"
   vpc_security_group_ids      = [aws_security_group.mysg.id]
-  subnet_id                   = aws_subnet.priv_sub.id
+  subnet_id                   = aws_subnet.pub_sub2.id
   associate_public_ip_address = true
   tags = {
     Name = "node2"
   }
-}
+}' > main.tf
