@@ -1,15 +1,22 @@
+events {}
+http {
+    upstream backend {
+                server <ip1>:9876;
+                server <ip2>:9876;
+            }
 
-server {
-    listen 80;
+    server {
+        listen 80;
+        server_name <master ip>;
 
-    server_name public_ip;
-
-    location / {
-        proxy_pass http://localhost:9876;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection upgrade;
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
+        location / {
+            proxy_pass http://backend;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade \$http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host \$host;
+            proxy_cache_bypass \$http_upgrade;
+        }
     }
+
 }
