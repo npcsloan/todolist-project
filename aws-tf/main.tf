@@ -5,7 +5,7 @@ provider "aws" {
 
 # create vpc
 resource "aws_vpc" "myvpc" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = "10.0.0.0/24"
   enable_dns_hostnames = true
   tags = {
     Name = "project-two"
@@ -30,7 +30,7 @@ resource "aws_route_table" "pub_rt" {
 # create public subnet1
 resource "aws_subnet" "pub_sub1" {
   vpc_id            = aws_vpc.myvpc.id
-  cidr_block        = "10.0.0.0/17"
+  cidr_block        = "10.0.0.0/28"
   availability_zone = "us-west-1a"
   tags = {
     Name = "public1"
@@ -40,8 +40,8 @@ resource "aws_subnet" "pub_sub1" {
 # create public subnet2
 resource "aws_subnet" "pub_sub2" {
   vpc_id            = aws_vpc.myvpc.id
-  cidr_block        = "10.0.128.0/17"
-  availability_zone = "us-west-1a"
+  cidr_block        = "10.0.0.16/28"
+  availability_zone = "us-west-1c"
   tags = {
     Name = "public2"
   }
@@ -100,8 +100,19 @@ resource "aws_instance" "master" {
 }
 # Need to go back and put one target node on pub_sub1
 # Create target nodes
-resource "aws_instance" "nodes" {
-  count                       = var.num_of_nodes
+resource "aws_instance" "node1" {
+  key_name                    = "study-key"
+  ami                         = "ami-014d05e6b24240371"
+  instance_type               = "t2.micro"
+  vpc_security_group_ids      = [aws_security_group.mysg.id]
+  subnet_id                   = aws_subnet.pub_sub1.id
+  associate_public_ip_address = true
+  tags = {
+    Name = "node1"
+  }
+}
+
+resource "aws_instance" "node2" {
   key_name                    = "study-key"
   ami                         = "ami-014d05e6b24240371"
   instance_type               = "t2.micro"
@@ -109,6 +120,6 @@ resource "aws_instance" "nodes" {
   subnet_id                   = aws_subnet.pub_sub2.id
   associate_public_ip_address = true
   tags = {
-    Name = "node${count.index + 1}"
+    Name = "node2"
   }
 }
