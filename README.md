@@ -210,7 +210,13 @@ django_project=to_do_proj
 ; host_key_checking=no' > inventory.ini
 ```
 
-#### 5. Create and run playbook to run initial updates on target nodes
+#### 5. Ping target nodes to confirm connection
+```
+ansible node1 -m ping  -i inventory
+ansible node2 -m ping  -i inventory
+```
+
+#### 6. Create and run playbook to run initial updates on target nodes
 ```
 echo '
 ---
@@ -227,7 +233,7 @@ echo '
 ansible-playbook updates.yml -i inventory.ini
 ```
 
-#### 6. Create and run playbook to git clone files for todolist, install python3.10-venv, create venv, and install items from requirements.txt
+#### 7. Create and run playbook to git clone files for todolist, install python3.10-venv, create venv, and install items from requirements.txt
 ```
 echo '
 - hosts: all
@@ -268,7 +274,7 @@ echo '
 ansible-playbook mypackages.yml -i inventory.ini
 ```
 
-#### 7. Create and run playbook to copy env file to target nodes
+#### 8. Create and run playbook to copy env file to target nodes
 ```
 echo '
 ---
@@ -279,13 +285,13 @@ echo '
   tasks:
     - name: Copy env file to hosts
       copy:
-        src: ~/project-two/env
+        src: ~/env
         dest: /home/ubuntu/todo-list/.env
         mode: 0644' > copyenv.yml
 ansible-playbook copyenv.yml -i inventory.ini
 ```
 
-#### 8. Configure .service file for gunicorn
+#### 9. Configure .service file for gunicorn
 ```
 echo '
 [Unit]
@@ -305,7 +311,7 @@ RestartSec=10
 WantedBy=multi-user.target' > todolist.service
 ```
 
-#### 9. Create and run playbook to copy todolist.service file to target nodes, enable and start gunicorn, and restart gunicorn when changes are made
+#### 10. Create and run playbook to copy todolist.service file to target nodes, enable and start gunicorn, and restart gunicorn when changes are made
 ```
 echo '
 ---
@@ -316,7 +322,7 @@ echo '
   tasks:
     - name: Copy Gunicorn systemd service file
       template:
-        src: ~/project-two/todolist.service
+        src: ~/todolist.service
         dest: /etc/systemd/system/todolist.service
       register: gunicorn_service
 
@@ -343,7 +349,7 @@ echo '
 ansible-playbook gunicorn.yml -i inventory.ini
 ```
 
-#### 10. Create a listener on port 80 that redirects traffic to port 9876
+#### 11. Create a listener on port 80 that redirects traffic to port 9876
 ```
 echo '
 server {
@@ -362,7 +368,7 @@ server {
 }' > todolist
 ```
 
-#### 11. Create and run playbook that copies port forwarding config file (todolist) to target nodes, install nginx, change public ip in nginx config, and enable nginx site
+#### 12. Create and run playbook that copies port forwarding config file (todolist) to target nodes, install nginx, change public ip in nginx config, and enable nginx site
 ```
 echo '
 ---
@@ -379,7 +385,7 @@ echo '
 
     - name: Configure Nginx
       template:
-        src: ~/project-two/todolist
+        src: ~/todolist
         dest: /etc/nginx/sites-available/todolist
         owner: root
         group: root
