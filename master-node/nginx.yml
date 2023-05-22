@@ -1,19 +1,36 @@
 ---
-- name: Configure Nginx as a reverse proxy
-  hosts: localhost
+- name: Configure Nginx port forwarding
+  hosts: all
   become: true
+  become_user: root
+  gather_facts: no
   tasks:
     - name: Install Nginx
-      ansible.builtin.package:
+      apt:
         name: nginx
         state: present
 
     - name: Configure Nginx
       template:
         src: ~/todolist
-        dest: /etc/nginx/todolist
-      notify:
-        - Restart Nginx
+        dest: /etc/nginx/sites-available/todolist
+        owner: root
+        group: root
+        mode: 0644
+      notify: Restart Nginx
+
+    - name: Change public_ip in Nginx configuration
+      replace:
+        path: /etc/nginx/sites-available/todolist
+        regexp: 'server_name public_ip;'
+        replace: 'server_name {{ ansible_host }};'
+
+    - name: Enable Nginx site
+      file:
+        src: /etc/nginx/sites-available/todolist
+        dest: /etc/nginx/sites-enabled/todolist
+        state: link
+      notify: Restart Nginx
 
   handlers:
     - name: Restart Nginx
