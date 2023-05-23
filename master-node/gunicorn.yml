@@ -6,7 +6,7 @@
   tasks:
     - name: Copy Gunicorn systemd service file
       template:
-        src: ~/todolist.service
+        src: todolist.service
         dest: /etc/systemd/system/todolist.service
       register: gunicorn_service
 
