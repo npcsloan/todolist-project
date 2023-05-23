@@ -6,6 +6,6 @@
   tasks:
     - name: Copy env file to hosts
       copy:
-        src: ~/env
+        src: env
         dest: /home/ubuntu/todo-list/.env
         mode: 0644
