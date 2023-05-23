@@ -212,8 +212,8 @@ django_project=to_do_proj
 
 #### 5. Ping target nodes to confirm connection
 ```
-ansible node1 -m ping  -i inventory.ini
-ansible node2 -m ping  -i inventory.ini
+ansible node1 -m ping -i inventory.ini
+ansible node2 -m ping -i inventory.ini
 ```
 
 #### 6. Create and run playbook to run initial updates on target nodes
