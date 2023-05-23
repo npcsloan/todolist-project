@@ -107,7 +107,7 @@ resource "aws_security_group" "mysg" {
 # Create master node
 resource "aws_instance" "master" {
   key_name                    = "study-key"
-  ami                         = "ami-0583a1f1cd3c11ebc"
+  ami                         = "ami-087bf433bedbc2ef7"
   instance_type               = "t2.micro"
   vpc_security_group_ids      = [aws_security_group.mysg.id]
   subnet_id                   = aws_subnet.pub_sub1.id
@@ -120,7 +120,7 @@ resource "aws_instance" "master" {
 # Create target nodes
 resource "aws_instance" "node1" {
   key_name                    = "study-key"
-  ami                         = "ami-014d05e6b24240371"
+  ami                         = "ami-0f8e81a3da6e2510a"
   instance_type               = "t2.micro"
   vpc_security_group_ids      = [aws_security_group.mysg.id]
   subnet_id                   = aws_subnet.pub_sub1.id
@@ -132,7 +132,7 @@ resource "aws_instance" "node1" {
 
 resource "aws_instance" "node2" {
   key_name                    = "study-key"
-  ami                         = "ami-014d05e6b24240371"
+  ami                         = "ami-0f8e81a3da6e2510a"
   instance_type               = "t2.micro"
   vpc_security_group_ids      = [aws_security_group.mysg.id]
   subnet_id                   = aws_subnet.pub_sub2.id
@@ -191,8 +191,6 @@ sudo amazon-linux-extras install ansible2 -y
 
 #### 4. Input details for target nodes, add variables
 ```
-code inventory.ini
-#configure
 echo '
 [webservers]
 node1 ansible_host=<node1ip> ansible_user=ubuntu
@@ -285,7 +283,7 @@ echo '
   tasks:
     - name: Copy env file to hosts
       copy:
-        src: ~/env
+        src: env
         dest: /home/ubuntu/todo-list/.env
         mode: 0644' > copyenv.yml
 ansible-playbook copyenv.yml -i inventory.ini
@@ -322,7 +320,7 @@ echo '
   tasks:
     - name: Copy Gunicorn systemd service file
       template:
-        src: ~/todolist.service
+        src: todolist.service
         dest: /etc/systemd/system/todolist.service
       register: gunicorn_service
 
@@ -385,7 +383,7 @@ echo '
 
     - name: Configure Nginx
       template:
-        src: ~/todolist
+        src: todolist
         dest: /etc/nginx/sites-available/todolist
         owner: root
         group: root
