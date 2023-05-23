@@ -12,7 +12,7 @@
 
     - name: Configure Nginx
       template:
-        src: ~/todolist
+        src: todolist
         dest: /etc/nginx/sites-available/todolist
         owner: root
         group: root
