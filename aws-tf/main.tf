@@ -6,7 +6,7 @@ provider "aws" {
 # create vpc
 resource "aws_vpc" "myvpc" {
   cidr_block = "10.0.0.0/24"
-  # enable_dns_hostnames = true
+  enable_dns_hostnames = true
   tags = {
     Name = "project-two"
   }
@@ -98,7 +98,7 @@ resource "aws_instance" "master" {
     Name = "master"
   }
 }
-# Need to go back and put one target node on pub_sub1
+
 # Create target nodes
 resource "aws_instance" "node1" {
   key_name               = "study-key"
@@ -106,7 +106,7 @@ resource "aws_instance" "node1" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.mysg.id]
   subnet_id              = aws_subnet.pub_sub1.id
-  # associate_public_ip_address = true
+  associate_public_ip_address = true
   tags = {
     Name = "node1"
   }
@@ -118,7 +118,7 @@ resource "aws_instance" "node2" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.mysg.id]
   subnet_id              = aws_subnet.pub_sub2.id
-  # associate_public_ip_address = true
+  associate_public_ip_address = true
   tags = {
     Name = "node2"
   }
